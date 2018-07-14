@@ -1,12 +1,16 @@
-intent: {
+intents
+articles
+doctors
+
+intent: { // Intent
   name,
   articles: [
-    article: {
+    { // Article
       name,
       linkurl,
       snippet,
       upvotes,
-      doctors: [{
+      doctors: [{ // Doctor
         name,
         education,
       }]
