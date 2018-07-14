@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Annotations start="0" num="6" total="6">
+  <Annotation about="www.hhs.gov/*" score="1" timestamp="0x000570fa76cf0e4a" href="Cg13d3cuaGhzLmdvdi8qEMqcvLann9wC" srStatus="1">
+    <Label name="_cse_9jk1vqwukju" />
+    <AdditionalData attribute="original_url" value="https://www.hhs.gov/" />
+  </Annotation>
+  <Annotation about="www.aap.org/en-us/Pages/Default.aspx" score="1" timestamp="0x000570fa6fbdc0ed" href="CiR3d3cuYWFwLm9yZy9lbi11cy9QYWdlcy9EZWZhdWx0LmFzcHgQ7YH3_aaf3AI" srStatus="1">
+    <Label name="_cse_9jk1vqwukju" />
+    <AdditionalData attribute="original_url" value="https://www.aap.org/en-us/Pages/Default.aspx" />
+  </Annotation>
+  <Annotation about="www.cdc.gov/*" score="1" timestamp="0x000570fa6707eacf" href="Cg13d3cuY2RjLmdvdi8qEM_Vn7imn9wC" srStatus="1">
+    <Label name="_cse_9jk1vqwukju" />
+    <AdditionalData attribute="original_url" value="https://www.cdc.gov/" />
+  </Annotation>
+  <Annotation about="www.fda.gov/*" score="1" timestamp="0x000570fa6707eac9" href="Cg13d3cuZmRhLmdvdi8qEMnVn7imn9wC" srStatus="1">
+    <Label name="_cse_9jk1vqwukju" />
+    <AdditionalData attribute="original_url" value="https://www.fda.gov/" />
+  </Annotation>
+  <Annotation about="www.immunize.org/*" score="1" timestamp="0x000570fa6707eac1" href="ChJ3d3cuaW1tdW5pemUub3JnLyoQwdWfuKaf3AI" srStatus="1">
+    <Label name="_cse_9jk1vqwukju" />
+    <AdditionalData attribute="original_url" value="http://www.immunize.org/" />
+  </Annotation>
+  <Annotation about="www.who.int/*" score="1" timestamp="0x000570fa6707eaa8" href="Cg13d3cud2hvLmludC8qEKjVn7imn9wC" srStatus="1">
+    <Label name="_cse_9jk1vqwukju" />
+    <AdditionalData attribute="original_url" value="http://www.who.int/" />
+  </Annotation>
+</Annotations>
