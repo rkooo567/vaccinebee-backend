@@ -7,10 +7,21 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.get('/api/diseases', (request, response) => {
-  // dialogflow('Hello', () => {});
+app.get('/api/diseases', (request, response, next) => {
+  console.log('/api/diseases');
   response.send(`Received ${request.query.name}`);
 });
+
+app.get('/api/dialogflow', (request, response, next) => {
+  console.log('/api/dialogflow');
+  dialogflow(request.query.query, (error, dialogflowResponse) => {
+    response.send(dialogflowResponse);
+  });
+});
+
+// app.get('*', (request, response, next) => {
+//   console.log('*');
+// });
 
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), () => {
