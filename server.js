@@ -5,11 +5,17 @@ const firebase = require('./server/firebase.js');
 const app = express();
 const search = require('./controller/customSearch').search;
 
+app.use('/public', express.static(process.cwd() + '/public'));
+app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.get('/api/diseases', (request, response, next) => {
-  console.log('/api/diseases');
+app.get('/', (request, response) => {
+  response.render('search.ejs');
+});
+
+app.get('/api/diseases', (request, response) => {
+  // dialogflow('Hello', () => {});
   response.send(`Received ${request.query.name}`);
 });
 app.get('/api/dialogflow', (request, response, next) => {
