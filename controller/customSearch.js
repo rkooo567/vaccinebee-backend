@@ -18,7 +18,7 @@ const search = (req, res, query) => {
     .then(queryResult => {
         //let listOfParsedSearchResult = parseItems(queryResult); 
         //console.log(listOfParsedSearchResult)
-        res.status(statusCode.OK).send(queryResult);
+        res.status(statusCode.OK).send(queryResult.items);
     })
     .catch(error => {
         console.error(error);
