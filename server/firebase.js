@@ -22,7 +22,7 @@ const database = firebase.database();
 module.exports = {
   read: (collection, callback) => {
     const reference = database.ref(collection);
-    reference.on('value', (data) => {
+    reference.once('value', (data) => {
       callback(null, data.val());
     }, (error) => {
       callback(error, null);
@@ -31,7 +31,7 @@ module.exports = {
   push: (collection, payload, callback) => {
     const reference = database.ref(collection);
     reference.push(payload);
-    reference.on('value', (data) => {
+    reference.once('value', (data) => {
       callback(null, data.val());
     }, (error) => {
       callback(error, null);
@@ -40,7 +40,7 @@ module.exports = {
   remove: (collection, key, callback) => {
     const reference = database.ref(collection);
     reference.remove(key);
-    reference.on('value', (data) => {
+    reference.once('value', (data) => {
       callback(null, data.val());
     }, (error) => {
       callback(error, null);
@@ -49,7 +49,7 @@ module.exports = {
   update: (collection, key, payload, callback) => {
     const reference = database.ref(collection);
     reference.child(key).set(payload);
-    reference.on('value', (data) => {
+    reference.once('value', (data) => {
       callback(null, data.val());
     }, (error) => {
       callback(error, null);
