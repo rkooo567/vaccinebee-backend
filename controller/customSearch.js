@@ -18,12 +18,11 @@ const search = (req, res, query) => {
     .then(queryResult => {
         //let listOfParsedSearchResult = parseItems(queryResult); 
         //console.log(listOfParsedSearchResult)
-        console.log(queryResult.items);
-        //res.status(statusCode.OK).send(queryResult);
+        res.status(statusCode.OK).send(queryResult);
     })
     .catch(error => {
         console.error(error);
-        //res.status(statusCode.NOT_FOUND).send('error occured');
+        res.status(statusCode.NOT_FOUND).send('error occured');
     });
 }
 
