@@ -37,6 +37,7 @@ app.post('/api/dialogflow', (request, response) => {
         agent.add(`Testing with ${response}`);
       }
     });
+    agent.add("bla bla bla bla");
   }
 
   const searchByCountry = (agent) => {
