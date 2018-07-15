@@ -1,17 +1,16 @@
 const _ = require('lodash');
 const firebase = require('./firebase.js');
 
-const join = (array) => {
-  if (array.length > 1) {
-    return array.slice(0, array.length - 1).join(', ') + ' and ' + array[array.length -1];
-  }
-  else {
-    return array[0];
-  }
-}
-
 module.exports = {
   searchByAge: (age, callback) => {
+    const arrayStringify = (array) => {
+      if (array.length > 1) {
+        return array.slice(0, array.length - 1).join(', ') + ' and ' + array[array.length -1];
+      }
+      else {
+        return array[0];
+      }
+    }
     firebase.read('articles', (error, firebaseResponse) => {
       if (error) {
         callback(error, null);
@@ -30,7 +29,7 @@ module.exports = {
               diseases[disease] = 0;
             }
           });
-        callback(null, `The most common diseases for a ${age} year old are ${join(diseases)}.`);
+        callback(null, `The most common disease${Object.keys(diseases).length === 1 ? '' : 's'} for a ${age} year old ${Object.keys(diseases).length === 1 ? 'is' : 'are'} ${arrayStringify(Object.keys(diseases))}.`);
       }
     });
   }
