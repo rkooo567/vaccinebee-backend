@@ -12,10 +12,10 @@
 </p>
 
 ### Installation
-`npm install`
-
-`npm run start`
+```
+npm install
+npm run start
+```
 
 Navigate to `localhost:5000`
 
-Frontend: https://github.com/rkooo567/VaccineBeeFrontend
