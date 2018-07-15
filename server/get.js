@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const dialogflow = require('./dialogflow.js');
 const firebase = require('./firebase.js');
 
 const arrayStringify = (array) => {
@@ -11,6 +12,16 @@ const arrayStringify = (array) => {
 }
 
 module.exports = {
+  questions: (query, callback) => {
+    dialogflow(query, (error, response) => {
+      if (error) {
+        callback(error, null);
+      }
+      else {
+        let dummy;
+      }
+    });
+  },
   searchByCountry: (country, callback) => {
     return new Promise((resolve, reject) => {
       firebase.read('articles', (error, firebaseResponse) => {
@@ -36,7 +47,7 @@ module.exports = {
       });
     });
   },
-    searchByAge: (age) => {
+  searchByAge: (age) => {
     return new Promise((resolve, reject) => {
       firebase.read('articles', (error, articles) => {
         if (error) {

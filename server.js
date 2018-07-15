@@ -23,16 +23,13 @@ const log = (input) => {
 }
 
 // Routes
-
 app.get('/', (request, response) => {
   response.render('doctor-dashboard');
 });
-
 app.get('/api/diseases', (request, response) => {
   // dialogflow('Hello', () => {});
   response.send(`Received ${request.query.name}`);
 });
-
 app.post('/api/dialogflow', (request, response) => {
   const agent = new WebhookClient({ request, response });
    const searchByAge = (agent) => {
@@ -50,7 +47,6 @@ app.post('/api/dialogflow', (request, response) => {
   intentMap.set('searchByAge', searchByAge);
   agent.handleRequest(intentMap);
 });
-
 app.get('/api/searchAdd', (request, response) => {
   log('/api/searchAdd');
   const searchQuery = request.query.searchQuery;
@@ -76,14 +72,12 @@ app.get('/api/searchAdd', (request, response) => {
     }
   });
 });
-
 app.get('/api/search', (request, response) => {
   log('/api/search');
   const searchQuery = request.query.searchQuery;
   search.search(request, response, searchQuery);
 });
-
-app.get('/api/upvote', (request, response) => {
+app.post('/api/upvote', (request, response) => {
   const articleId = request.query.articleId;
   set.upvote(articleId, (error, upvoteResponse) => {
     if (error) {
@@ -94,8 +88,25 @@ app.get('/api/upvote', (request, response) => {
     }
   });
 });
+app.get('/api/getQuestions', (request, response) => {
+  get.questions(request.query.query, (error, questionsResponse) => {
+    if (error) {
+      response.send(false);
+    }
+    else {
+      response.send(questionsResponse);
+    }
+  });
+});
+app.put('/api/editSnippet', (request, response) => {});
 
+// Run server
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), () => {
   log('Port ' + app.get('port'));
+});
+
+// Test
+get.questions('I am 20 years old', (error, questionsResponse) => {
+  let dummy;
 });
