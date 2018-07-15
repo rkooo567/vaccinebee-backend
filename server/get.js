@@ -32,7 +32,7 @@ module.exports = {
           const summary = Object.keys(firebaseResponse)
             .map(key => firebaseResponse[key])
             .filter(article => article.disease == disease)[0].snippet;
-          resolve(`According to CDC ${summary}`);
+          resolve(`According to CDC, ${summary}`);
         }
       });
     });

@@ -50,14 +50,14 @@ app.post('/api/dialogflow', (request, response) => {
   }
 
   const bookAppointment = (agent) => {
-    let date = new Date(agent.parameters.date);  
-    let options = {  
-        weekday: "long", month: "short",  
-        day: "numeric", hour: "2-digit", minute: "2-digit"  
-    };  
+    let date = new Date(agent.parameters.date);
+    let options = {
+        weekday: "long", month: "short",
+        day: "numeric", hour: "2-digit", minute: "2-digit"
+    };
 
-    console.log(date.toLocaleTimeString("en-us", options)); 
-    agent.add(`Cool ! You have your appointment for ${agent.parameters.disease} at ${date.toLocaleTimeString("en-us", options)}`);
+    console.log(date.toLocaleTimeString("en-us", options));
+    agent.add(`Cool ! You have your appointment for ${agent.parameters.disease} on ${date.toLocaleTimeString("en-us", options)}`);
   }
 
   const intentMap = new Map();
@@ -83,10 +83,10 @@ app.get('/api/searchAdd', (request, response) => {
           high: 50,
         };
         result.countries = [
-          
+
         ];
         firebase.push('articles', result, (firebaseResponse) => {
-          
+
         });
       });
     }
