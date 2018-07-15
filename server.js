@@ -46,10 +46,10 @@ app.get('/api/searchArticlesUsingGoogle', (request, response) => {
 });
 app.get('/api/searchArticlesThroughText', (request, response) => {
   get.searchArticlesThroughText(request.query.query).then(articles => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true);
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    response.setHeader('Access-Control-Allow-Credentials', true);
     response.send(articles);
   });
 });
@@ -62,10 +62,10 @@ app.get('/api/getTrendingQuestions', (request, response) => {
     else {
       const questions = Object.keys(questionsResponse).map(id => questionsResponse[id])
       _.sortBy(questions, [(question) => { return question.timesAsked; }]);
-      res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true);
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+      response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+      response.setHeader('Access-Control-Allow-Credentials', true);
       response.send(questions.slice(0, 10)); // Send top 5 most asked questions
     }
   });
@@ -74,10 +74,10 @@ app.post('/api/getArticlesAnsweringQuestion', (request, response) => {
   get.searchArticlesAnsweringQuestion(request.body.parameters).then(articlesResponse => {
     const articles = Object.keys(articlesResponse).map(id => articlesResponse[id]);
     _.sortBy(articles, [(article) => { return article.upvotes; }]);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true);
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    response.setHeader('Access-Control-Allow-Credentials', true);
     response.send(articles.slice(0, 10));
   });
 });
