@@ -10,11 +10,9 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-
-
-
+// routes
 app.get('/', (request, response) => {
-  response.render('search.ejs');
+  response.render('doctor-dashboard');
 });
 
 app.get('/api/diseases', (request, response) => {
