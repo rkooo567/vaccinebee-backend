@@ -148,7 +148,7 @@ module.exports = {
           resolve(`According to CDC, ${summary}`);
         });
       }
-      reject('Does not match any parameters');
+      reject(`${JSON.stringify(parameters)} does not match any parameters`);
     });
   },
   searchArticlesThroughText: (query) => {
