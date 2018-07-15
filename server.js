@@ -37,13 +37,17 @@ app.post('/api/dialogflow', (request, response) => {
       agent.add(getResponse);
     });
   }
+  const bookAppointment = (agent) => {
+    agent.add(`Cool ! your appointment for ${agent.parameters.disease} is booked for ${agent.parameters.date} `);
+  }
   const intentMap = new Map();
   intentMap.set('searchByCountry', search);
   intentMap.set('searchByDisease', search);
   intentMap.set('searchByAge', search);
+  intentMap.set('bookAppointment', bookAppointment);
   agent.handleRequest(intentMap);
 });
-app.get('/api/searchAdd', (request, response) => {
+app.get('/api/searchArticlesAndAdd', (request, response) => {
   log('/api/searchAdd');
   const searchQuery = request.query.searchQuery;
   search.savedSearch(searchQuery, (error, saveSearchResponse) => {
@@ -68,7 +72,7 @@ app.get('/api/searchAdd', (request, response) => {
     }
   });
 });
-app.get('/api/search', (request, response) => {
+app.get('/api/searchArticles', (request, response) => {
   log('/api/search');
   const searchQuery = request.query.searchQuery;
   search.search(request, response, searchQuery);
@@ -84,7 +88,7 @@ app.post('/api/upvote', (request, response) => {
     }
   });
 });
-app.get('/api/getQuestions', (request, response) => {
+app.get('/api/searchQuestions', (request, response) => {
   get.questions(request.query.query, (error, questionsResponse) => {
     if (error) {
       response.send(false);
