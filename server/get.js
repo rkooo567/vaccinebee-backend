@@ -145,7 +145,7 @@ module.exports = {
         searchArticlesByDisease(parameters.disease).then(searchResponse => {
           const summary = Object.keys(searchResponse)
             .map(key => searchResponse[key])
-            .find(article => article.disease == parameters.disease);
+            .find(article => article.disease === parameters.disease);
           if (summary) {
             resolve(`According to CDC, ${summary.snippet}`);
           }
@@ -169,7 +169,10 @@ module.exports = {
           if (typeof response === 'string') {
             response = JSON.parse(response);
           }
-          const parameters = response.result.parameters;
+          let parameters;
+          if (response && response.result && response.result.parameters) {
+            parameters = response.result.parameters;
+          }
           saveQuestion(response.result);
           if (parameters.age) {
             resolve(searchArticlesByAge(parameters.age.amount));
