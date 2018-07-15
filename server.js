@@ -18,12 +18,14 @@ app.get('/api/diseases', (request, response) => {
   // dialogflow('Hello', () => {});
   response.send(`Received ${request.query.name}`);
 });
+
 app.get('/api/dialogflow', (request, response, next) => {
   console.log('/api/dialogflow');
   dialogflow(request.query.query, (error, dialogflowResponse) => {
     response.send(dialogflowResponse);
   });
 });
+
 app.get('/api/search', (request, response) => {
   const searchQuery = request.query.searchQuery;
   search(request, response, searchQuery);
@@ -33,3 +35,4 @@ app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), () => {
   console.log('Port ' + app.get('port'));
 });
+

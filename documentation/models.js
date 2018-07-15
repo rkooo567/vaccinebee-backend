@@ -7,6 +7,11 @@ intent: { // Intent
   articles: [
     { // Article
       name,
+      age-group: {
+        low,
+        high,
+      },
+      country: [],
       linkurl,
       snippet,
       upvotes,
