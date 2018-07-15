@@ -145,8 +145,13 @@ module.exports = {
         searchArticlesByDisease(parameters.disease).then(searchResponse => {
           const summary = Object.keys(searchResponse)
             .map(key => searchResponse[key])
-            .filter(article => article.disease == parameters.disease)[0].snippet;
-          resolve(`According to CDC, ${summary}`);
+            .find(article => article.disease == parameters.disease);
+          if (summary) {
+            resolve(`According to CDC, ${summary.snippet}`);
+          }
+          else {
+            reject('No summary');
+          }
         });
       }
       else {
