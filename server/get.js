@@ -32,9 +32,9 @@ const pluralize = (array, singular, plural) => {
 }
 
 // Private
-const searchByDisease = (disease) => {
+const searchArticlesByDisease = (disease) => {
   return new Promise((resolve, reject) => {
-    firebase.read('articles', (error, firebaseResponse) => {
+    firebase.get('articles', (error, firebaseResponse) => {
       if (error) {
         reject(error);
       }
@@ -44,9 +44,9 @@ const searchByDisease = (disease) => {
     });
   });
 };
-const searchByCountry = (country, callback) => {
+const searchArticlesByCountry = (country) => {
   return new Promise((resolve, reject) => {
-    firebase.read('articles', (error, firebaseResponse) => {
+    firebase.get('articles', (error, firebaseResponse) => {
       if (error) {
         reject(error);
       }
@@ -60,9 +60,9 @@ const searchByCountry = (country, callback) => {
     });
   });
 };
-const searchByAge = (age) => {
+const searchArticlesByAge = (age) => {
   return new Promise((resolve, reject) => {
-    firebase.read('articles', (error, articles) => {
+    firebase.get('articles', (error, articles) => {
       if (error) {
         reject(error);
       }
@@ -76,13 +76,40 @@ const searchByAge = (age) => {
     });
   });
 }
+const saveQuestion = (agent) => {
+  const newQuestion = {
+    query: agent.query || agent.resolvedQuery,
+    parameters: agent.parameters,
+  };
+  firebase.get('questions', (error, questions) => {
+    if (error) {
+      log(error);
+    }
+    else {
+      let existingQuestionId;
+      if (questions) {
+        existingQuestionId = Object.keys(questions).find(id => _.isEqual(questions[id].parameters, newQuestion.parameters));
+      }
+      if (existingQuestionId) { // Question already exists, update by incrementing number of times asked
+        newQuestion.timesAsked = questions[existingQuestionId].timesAsked + 1;
+        firebase.update('questions', existingQuestionId, newQuestion, (error, updateResponse) => {});
+      }
+      else { // Question never before asked, initialize number of times asked to 1
+        newQuestion.timesAsked = 1;
+        firebase.create('questions', newQuestion, (error, createResponse) => {});
+      }
+    }
+  });
+};
 
 // Public
 module.exports = {
-  queryByVoice: (parameters, callback) => {
+  searchArticlesThroughVoice: (agent, callback) => {
+    const parameters = agent.parameters;
+    saveQuestion(agent);
     return new Promise((resolve, reject) => {
       if (parameters.age) {
-        searchByAge(parameters.age.amount).then(searchResponse => {
+        searchArticlesByAge(parameters.age.amount).then(searchResponse => {
           const diseases = {};
           searchResponse
             .map(article => article.disease)
@@ -99,7 +126,7 @@ module.exports = {
       }
       else if (parameters.country) {
         const diseases = {};
-        searchByCountry(parameters.country).then(searchResponse => {
+        searchArticlesByCountry(parameters.country).then(searchResponse => {
           searchResponse
             .map(article => article.disease)
             .forEach(disease => {
@@ -114,14 +141,14 @@ module.exports = {
         });
       }
       else if (parameters.disease) {
-        searchByDisease(parameters.disease).then(searchResponse => {
+        searchArticlesByDisease(parameters.disease).then(searchResponse => {
           const summary = Object.keys(searchResponse)
             .map(key => searchResponse[key])
             .filter(article => article.disease == disease)[0].snippet;
           resolve(`Here is a summary ${summary}`);
         });
       }
-      // firebase.read('articles', (error, firebaseResponse) => {
+      // firebase.get('articles', (error, firebaseResponse) => {
       //   if (error) {
       //     reject(error);
       //   }
@@ -134,7 +161,7 @@ module.exports = {
       // });
     });
   },
-  queryByText: (query, callback) => {
+  searchArticlesThroughText: (query, callback) => {
     return new Promise((resolve, reject) => {
       dialogflow(query, (error, response) => {
         if (error) {
@@ -145,14 +172,15 @@ module.exports = {
             response = JSON.parse(response);
           }
           const parameters = response.result.parameters;
+          saveQuestion(response.result);
           if (parameters.age) {
-            resolve(searchByAge(parameters.age.amount));
+            resolve(searchArticlesByAge(parameters.age.amount));
           }
           else if (parameters.country) {
-            resolve(searchByCountry(parameters.country));
+            resolve(searchArticlesByCountry(parameters.country));
           }
           else if (parameters.disease) {
-            resolve(searchByDisease(parameters.disease));
+            resolve(searchArticlesByDisease(parameters.disease));
           }
         }
       });

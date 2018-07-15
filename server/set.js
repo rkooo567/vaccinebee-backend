@@ -6,7 +6,7 @@ const log = (input) => {
 
 module.exports = {
   upvote: (articleId, callback) => {
-    firebase.read('articles', (error, articles) => {
+    firebase.get('articles', (error, articles) => {
       const article = articles[articleId];
       if (article) {
         let upvotes;

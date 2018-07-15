@@ -20,7 +20,7 @@ firebase.initializeApp(config);
 const database = firebase.database();
 
 module.exports = {
-  read: (collection, callback) => {
+  get: (collection, callback) => {
     const reference = database.ref(collection);
     reference.once('value', (data) => {
       callback(null, data.val());
@@ -28,7 +28,7 @@ module.exports = {
       callback(error, null);
     });
   },
-  push: (collection, payload, callback) => {
+  create: (collection, payload, callback) => {
     const reference = database.ref(collection);
     reference.push(payload);
     reference.once('value', (data) => {
@@ -37,7 +37,7 @@ module.exports = {
       callback(error, null);
     });
   },
-  remove: (collection, key, callback) => {
+  delete: (collection, key, callback) => {
     const reference = database.ref(collection);
     reference.remove(key);
     reference.once('value', (data) => {

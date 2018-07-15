@@ -1,4 +1,4 @@
-// Modules
+// Packages
 const bodyParser = require('body-parser');
 const express = require('express');
 const {WebhookClient, Card, Suggestion} = require('dialogflow-fulfillment');
@@ -26,36 +26,8 @@ const log = (input) => {
 app.get('/', (request, response) => {
   response.render('doctor-dashboard');
 });
-app.get('/api/diseases', (request, response) => {
-  // dialogflow('Hello', () => {});
-  response.send(`Received ${request.query.name}`);
-});
-app.post('/api/dialogflow', (request, response) => {
-  const agent = new WebhookClient({ request, response });
-  const search = (agent) => {
-    return get.queryByVoice(agent.parameters).then((getResponse) => {
-      agent.add(getResponse);
-    });
-  }
-  const bookAppointment = (agent) => {
-    let date = new Date(agent.parameters.date);
-    let options = {
-        weekday: "long", month: "short",
-        day: "numeric", hour: "2-digit", minute: "2-digit"
-    };
-
-    console.log(date.toLocaleTimeString("en-us", options));
-    agent.add(`Cool ! You have your appointment for ${agent.parameters.disease} on ${date.toLocaleTimeString("en-us", options)}`);
-  }
-  const intentMap = new Map();
-  intentMap.set('searchByCountry', search);
-  intentMap.set('searchByDisease', search);
-  intentMap.set('searchByAge', search);
-  intentMap.set('bookAppointment', bookAppointment);
-  agent.handleRequest(intentMap);
-});
-app.get('/api/searchArticlesAndAdd', (request, response) => {
-  log('/api/searchAdd');
+app.get('/api/searchArticlesUsingGoogleAndAdd', (request, response) => {
+  log('/api/searchArticlesUsingGoogleAndAdd');
   const searchQuery = request.query.searchQuery;
   search.savedSearch(searchQuery, (error, saveSearchResponse) => {
     if (error) {
@@ -72,17 +44,62 @@ app.get('/api/searchArticlesAndAdd', (request, response) => {
         result.countries = [
 
         ];
-        firebase.push('articles', result, (firebaseResponse) => {
+        firebase.create('articles', result, (firebaseResponse) => {
 
         });
       });
     }
   });
 });
-app.get('/api/searchArticles', (request, response) => {
-  log('/api/search');
+app.get('/api/searchArticlesUsingGoogle', (request, response) => {
+  log('/api/searchArticlesUsingGoogle');
   const searchQuery = request.query.searchQuery;
   search.search(request, response, searchQuery);
+});
+app.get('/api/searchArticlesThroughText', (request, response) => {
+  get.searchArticlesThroughText(request.query.query, (error, questionsResponse) => {
+    if (error) {
+      response.send(false);
+    }
+    else {
+      response.send(questionsResponse);
+    }
+  });
+});
+app.get('/api/getTrendingQuestions', (request, response) => {
+  firebase.get('questions', (error, questionsResponse) => {
+    if (error) {
+      log(error);
+      response.send(false);
+    }
+    else {
+      questionsResponse
+      response.send(questionsResponse);
+    }
+  });
+});
+app.post('/api/searchArticlesThroughVoice', (request, response) => {
+  const search = (agent) => {
+    return get.searchArticlesThroughVoice(agent).then((getResponse) => {
+      agent.add(getResponse);
+    });
+  }
+  const bookAppointment = (agent) => {
+    let date = new Date(agent.parameters.date);
+    let options = {
+        weekday: "long", month: "short",
+        day: "numeric", hour: "2-digit", minute: "2-digit"
+    };
+    console.log(date.toLocaleTimeString("en-us", options));
+    agent.add(`Cool! You have your appointment for ${agent.parameters.disease} on ${date.toLocaleTimeString("en-us", options)}`);
+  }
+  const agent = new WebhookClient({ request, response });
+  const intentMap = new Map();
+  intentMap.set('searchByCountry', search);
+  intentMap.set('searchByDisease', search);
+  intentMap.set('searchByAge', search);
+  intentMap.set('bookAppointment', bookAppointment);
+  agent.handleRequest(intentMap);
 });
 app.post('/api/upvote', (request, response) => {
   const articleId = request.query.articleId;
@@ -95,17 +112,6 @@ app.post('/api/upvote', (request, response) => {
     }
   });
 });
-app.get('/api/searchQuestions', (request, response) => {
-  get.questions(request.query.query, (error, questionsResponse) => {
-    if (error) {
-      response.send(false);
-    }
-    else {
-      response.send(questionsResponse);
-    }
-  });
-});
-app.put('/api/editSnippet', (request, response) => {});
 
 // Run server
 app.set('port', (process.env.PORT || 5000));
@@ -114,6 +120,6 @@ app.listen(app.get('port'), () => {
 });
 
 // Test
-get.queryByText('I am going to Brazil this weekend. Which vaccines should I get?').then(questionsResponse => {
-  log(questionsResponse);
+get.searchArticlesThroughText('I am going to Brazil this weekend. Which vaccines should I get?').then(questionsResponse => {
+  // log(questionsResponse);
 });
