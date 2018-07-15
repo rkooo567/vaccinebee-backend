@@ -185,5 +185,18 @@ module.exports = {
         }
       });
     });
+  },
+  searchArticlesAnsweringQuestion: (parameters, callback) => {
+    return new Promise((resolve, reject) => {
+      if (parameters.age) {
+        resolve(searchArticlesByAge(parameters.age.amount));
+      }
+      else if (parameters.country) {
+        resolve(searchArticlesByCountry(parameters.country));
+      }
+      else if (parameters.disease) {
+        resolve(searchArticlesByDisease(parameters.disease));
+      }
+    });
   }
 };

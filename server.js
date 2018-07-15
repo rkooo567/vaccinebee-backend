@@ -1,4 +1,5 @@
 // Packages
+const _ = require('lodash');
 const bodyParser = require('body-parser');
 const express = require('express');
 const {WebhookClient, Card, Suggestion} = require('dialogflow-fulfillment');
@@ -73,9 +74,17 @@ app.get('/api/getTrendingQuestions', (request, response) => {
       response.send(false);
     }
     else {
-      questionsResponse
-      response.send(questionsResponse);
+      const questions = Object.keys(questionsResponse).map(id => questionsResponse[id])
+      _.sortBy(questions, [(question) => { return question.timesAsked; }]);
+      response.send(questions.slice(0, 10)); // Send top 5 most asked questions
     }
+  });
+});
+app.post('/api/getArticlesAnsweringQuestion', (request, response) => {
+  get.searchArticlesAnsweringQuestion(request.body.parameters).then(articlesResponse => {
+    const articles = Object.keys(articlesResponse).map(id => articlesResponse[id]);
+    _.sortBy(articles, [(article) => { return article.upvotes; }]);
+    response.send(articles.slice(0, 10));
   });
 });
 app.post('/api/searchArticlesThroughVoice', (request, response) => {
@@ -120,6 +129,3 @@ app.listen(app.get('port'), () => {
 });
 
 // Test
-get.searchArticlesThroughText('I am going to Brazil this weekend. Which vaccines should I get?').then(questionsResponse => {
-  // log(questionsResponse);
-});
