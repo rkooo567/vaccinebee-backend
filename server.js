@@ -45,8 +45,15 @@ app.post('/api/dialogflow', (request, response) => {
       agent.add(getResponse);
     });
   }
+
+  const searchByDisease = (agent) => {
+    return get.searchByCountry(agent.parameters.disease).then((getResponse) => {
+      agent.add(getResponse);
+    });
+  }
   const intentMap = new Map();
   intentMap.set('searchByCountry', searchByCountry);
+  intentMap.set('searchByDisease', searchByDisease);
   intentMap.set('searchByAge', searchByAge);
   agent.handleRequest(intentMap);
 });

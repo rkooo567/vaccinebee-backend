@@ -11,6 +11,21 @@ const arrayStringify = (array) => {
 }
 
 module.exports = {
+  searchBydisease: (disease) => {
+    return new Promise((resolve, reject) => {
+      firebase.read('articles', (error, firebaseResponse) => {
+        if (error) {
+          reject(error);
+        }
+        else {
+          const summary = Object.keys(firebaseResponse)
+            .map(key => firebaseResponse[key])
+            .filter(article => article.disease == disease)[0].snippet;
+          resolve(`Here is a summart ${summary}`);
+        }
+      });
+    });
+  },
   searchByCountry: (country, callback) => {
     return new Promise((resolve, reject) => {
       firebase.read('articles', (error, firebaseResponse) => {
