@@ -2,11 +2,17 @@ intents
 articles
 doctors
 
-intent: { // Intent
-  name,
+intents: [ // Intent
+  disease,
+  query,
   articles: [
     { // Article
       name,
+      age-group: {
+        low,
+        high,
+      },
+      country: [],
       linkurl,
       snippet,
       upvotes,
@@ -16,4 +22,4 @@ intent: { // Intent
       }]
     }
   ]
-}
+]
