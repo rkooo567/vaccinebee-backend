@@ -12,10 +12,10 @@ const search = require('./controller/customSearch');
 
 // Setup
 const app = express();
-app.use('/public', express.static(process.cwd() + '/public'));
-app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use('/public', express.static(process.cwd() + '/public'));
+app.set('view engine', 'ejs');
 
 // Helpers
 const log = (input) => {
@@ -42,8 +42,15 @@ app.post('/api/dialogflow', (request, response) => {
       agent.add(getResponse);
     });
   }
+
+  const searchByDisease = (agent) => {
+    return get.searchByCountry(agent.parameters.disease).then((getResponse) => {
+      agent.add(getResponse);
+    });
+  }
   const intentMap = new Map();
   intentMap.set('searchByCountry', searchByCountry);
+  intentMap.set('searchByDisease', searchByDisease);
   intentMap.set('searchByAge', searchByAge);
   agent.handleRequest(intentMap);
 });
