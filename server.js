@@ -4,7 +4,16 @@ const dialogflow = require('./server/dialogflow.js');
 const firebase = require('./server/firebase.js');
 const app = express();
 const search = require('./controller/customSearch');
-const dialogFlowApp = require('actions-on-google').dialogflow;
+
+const {
+  dialogflow,
+  Image,
+} = require('actions-on-google')
+ 
+// Create an app instance
+ 
+const api_app = dialogflow()
+
 
 app.use('/public', express.static(process.cwd() + '/public'));
 app.set('view engine', 'ejs');
@@ -21,13 +30,9 @@ app.get('/api/diseases', (request, response) => {
 });
 
 app.post('/api/dialogflow', (request, response) => {
-  const api_app = new dialogFlowApp({request, response});
-  console.log('Request headers: ' + JSON.stringify(request.headers));
-  console.log('Request body: ' + JSON.stringify(request.body));
-  // Fulfill action business logic
-  function responseHandler (api_app) {
-    api_app.ask("what more do you want from me!");
-  };
+  api_app.intent('searchByAge', conv => {
+    conv.ask('Hi, how is it going?');
+  })
 });
 
 app.get('/api/searchAdd', (request, response) => {
