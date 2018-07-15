@@ -26,16 +26,28 @@ const search = (req, res, query) => {
     });
 }
 
+const savedSearch = (query, callback) => {
+    const queryUrl = `${searchUrl}&q=${query}`;
+    const options = {
+        method: 'GET',
+        uri: queryUrl,
+        json: true 
+    };
+    request(options)
+        .then(queryResult => { callback(null, parseItems(queryResult)); })
+        .catch(error => { callback(error, null); });
+}
+
 ////////////////////// ////////////////////// ////////////////////// ////////////////////// ////////////////////// 
 // private functions
 
-const parseItems = (query) => {
+const parseItems = (queryResult) => {
     let parsedItems = [];
-    let queryResult = search(query);
-    let count = 0;
+    // let queryResult = search(query);
+    // let count = 0;
     for (let i = 0; i < 6; i++) {
         let item = queryResult.items[i]
-        parsedItems.append(parseOnlyRequiredFieldInItem(item));
+        parsedItems.push(parseOnlyRequiredFieldInItem(item));
     }
 
     return parsedItems;
@@ -56,16 +68,15 @@ const parseOnlyRequiredFieldInItem = (item) => {
         snippet: item.snippet,
     };
 
-    if (item.pagemap.cse_thumbnail[0].src) {
-        parsedItem.thumbnailSrc = item.pagemap.cse_thumbnail[0].src;
-    }
+    // if (item.pagemap.cse_thumbnail[0].src) {
+    //     parsedItem.thumbnailSrc = item.pagemap.cse_thumbnail[0].src;
+    // }
 
     console.log("parsed Items: ", parsedItem)
-    return parsedResult;
+    return parsedItem;
 }
 
-search('vaccines');
-
 module.exports = {
-    search
+    search: search,
+    savedSearch: savedSearch,
 }

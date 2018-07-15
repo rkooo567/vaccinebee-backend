@@ -3,7 +3,7 @@ const express = require('express');
 const dialogflow = require('./server/dialogflow.js');
 const firebase = require('./server/firebase.js');
 const app = express();
-const search = require('./controller/customSearch').search;
+const search = require('./controller/customSearch');
 
 app.use('/public', express.static(process.cwd() + '/public'));
 app.set('view engine', 'ejs');
@@ -19,16 +19,36 @@ app.get('/api/diseases', (request, response) => {
   response.send(`Received ${request.query.name}`);
 });
 
-app.get('/api/dialogflow', (request, response, next) => {
+app.post('/api/dialogflow', (request, response, next) => {
   console.log('/api/dialogflow');
   dialogflow(request.query.query, (error, dialogflowResponse) => {
     response.send(dialogflowResponse);
   });
 });
 
-app.get('/api/search', (request, response) => {
+app.get('/api/searchAdd', (request, response) => {
+  console.log('/api/searchAdd');
   const searchQuery = request.query.searchQuery;
-  search(request, response, searchQuery);
+  search.savedSearch(searchQuery, (error, saveSearchResponse) => {
+    if (error) {
+      console.log(JSON.stringify(error, null, 2));
+    }
+    else {
+      saveSearchResponse.forEach(result => {
+        result.disease = 'varicella';
+        result.query = 'definition';
+        firebase.push('intents', result, (firebaseResponse) => {
+          console.log(firebaseResponse);
+        });
+      });
+    }
+  });
+});
+
+app.get('/api/search', (request, response) => {
+  console.log('/api/search');
+  const searchQuery = request.query.searchQuery;
+  search.search(request, response, searchQuery);
 });
 
 app.set('port', (process.env.PORT || 5000));

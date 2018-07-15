@@ -2,8 +2,9 @@ intents
 articles
 doctors
 
-intent: { // Intent
-  name,
+intents: [ // Intent
+  disease,
+  query,
   articles: [
     { // Article
       name,
@@ -21,4 +22,4 @@ intent: { // Intent
       }]
     }
   ]
-}
+]
