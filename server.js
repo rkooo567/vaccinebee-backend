@@ -27,14 +27,13 @@ app.get('/api/diseases', (request, response) => {
 
 app.post('/api/dialogflow', (request, response) => {
   const agent = new WebhookClient({ request, response });
-  log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
-  log('Dialogflow Request body: ' + JSON.stringify(request.body));
   const searchByAge = (agent) => {
     get.searchByAge(agent.parameters.age.amount, (error, response) => {
       if (error) {
         agent.add('Sorry, something went wrong on my end!');
       }
       else {
+        log('Dialogflow Request body: ' + response);
         agent.add(response);
       }
     });
