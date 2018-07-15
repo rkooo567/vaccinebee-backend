@@ -23,15 +23,20 @@ app.get('/api/diseases', (request, response) => {
 
 app.post('/api/dialogflow', (request, response) => {
   const agent = new WebhookClient({ request, response });
-  console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
-  console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
-const searchByAge = (agent) => {
 
-    console.log(JSON.stringify(request.body, null, 2));
-    agent.add(`i am an idiot who is ${request.body.queryResult.parameters.age}`);
+  const searchByAge = (agent) => {
+    console.log(JSON.stringify(agent.parameters, null, 2));
+    agent.add(`Responding to check age ${agent.parameters.age}`);
   }
+
+  const searchByCountry = (agent) => {
+    console.log(JSON.stringify(agent.parameters, null, 2));
+    agent.add(`Responding to by country ${agent.parameters.country}`);
+  }
+
   const intentMap = new Map();
   intentMap.set('searchByAge', searchByAge);
+  intentMap.set('searchByCountry', searchByCountry);
   agent.handleRequest(intentMap);
 });
 
