@@ -10,7 +10,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-// routes
 app.get('/', (request, response) => {
   response.render('doctor-dashboard');
 });
@@ -19,9 +18,14 @@ app.get('/api/diseases', (request, response) => {
   // dialogflow('Hello', () => {});
   response.send(`Received ${request.query.name}`);
 });
-
+app.get('/api/dialogflow', (request, response, next) => {
+  console.log('/api/dialogflow');
+  dialogflow(request.query.query, (error, dialogflowResponse) => {
+    response.send(dialogflowResponse);
+  });
+});
 app.get('/api/search', (request, response) => {
-  const searchQuery = request.query.searchQuery
+  const searchQuery = request.query.searchQuery;
   search(request, response, searchQuery);
 });
 

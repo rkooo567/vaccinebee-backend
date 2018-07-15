@@ -1,38 +1,34 @@
-const dialogflow = require('dialogflow');
-const Storage = require('@google-cloud/storage');
+const https = require('https');
 
-
-
-module.exports = {
-  init: () => {
-    storage.getBuckets()
-    .then((results) => {
-      const buckets = results[0];
-      buckets.forEach((bucket) => {
-        console.log(bucket.name);
-        const projectId = 'vacspider-2ef59'; // https://dialogflow.com/docs/agents#settings
-        const sessionId = 'quickstart-session-id';
-        const languageCode = 'en-US';
-        const sessionClient = new dialogflow.SessionsClient();
-        const sessionPath = sessionClient.sessionPath(projectId, sessionId);
-        const storage = new Storage({ keyFilename: 'google-keys.json' });
+module.exports = (query, callback) => {
+  const payload = {
+    lang: 'en',
+    query: query,
+    sessionId: '12345',
+    timeZone: 'America/Los_Angeles',
+    v: '20150910',
+  };
+  const options = {
+    headers: {
+      'Authorization': 'Bearer 0f9e1cad5f684665a0ddfcd755bdbc03',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    host: 'api.dialogflow.com',
+    path: '/v1/query/',
+  };
+  const request = https.request(options, (response) => {
+    let body = [];
+    response
+      .on('data', (chunk) => {
+        body.push(chunk);
+      })
+      .on('end', () => {
+        body = Buffer.concat(body).toString();
+        callback(null, body);
       });
-    })
-    .catch((err) => { callback(error, null); });
-  },
-  call: (query, callback) => {
-    const request = {
-      session: sessionPath,
-      queryInput: {
-        text: {
-          text: query,
-          languageCode: languageCode,
-        },
-      },
-    };
-    sessionClient
-      .detectIntent(request)
-      .then(responses => { callback(null, responses); })
-      .catch(error => { callback(error, null); });
-  }
-}
+    
+  });
+  request.write(JSON.stringify(payload));
+  request.end();
+};
