@@ -33,7 +33,7 @@ const pluralize = (array, singular, plural) => {
 
 // Private
 const searchArticlesByDisease = (disease) => {
-  disease = 'measles';
+  // disease = 'measles';
   return new Promise((resolve, reject) => {
     firebase.get('articles', (error, firebaseResponse) => {
       if (error) {
