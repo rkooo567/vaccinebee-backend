@@ -1,3 +1,5 @@
+// const async = require('asyncawait/async');
+// const await = require('asyncawait/await');
 const bodyParser = require('body-parser');
 const express = require('express');
 const search = require('./controller/customSearch');
@@ -27,27 +29,18 @@ app.get('/api/diseases', (request, response) => {
 
 app.post('/api/dialogflow', (request, response) => {
   const agent = new WebhookClient({ request, response });
-  const searchByAge = (agent) => {
-    get.searchByAge(agent.parameters.age.amount, (error, response) => {
-      if (error) {
-        agent.add('Sorry, something went wrong on my end!');
-      }
-      else {
-        log('Dialogflow Request body: ' + response);
-        agent.add(`Testing with ${response}`);
-      }
+   const searchByAge = (agent) => {
+    return get.searchByAge(agent.parameters.age.amount).then((getResponse) => {
+      agent.add(getResponse);
     });
-    agent.add("bla bla bla bla");
   }
-
   const searchByCountry = (agent) => {
-    console.log(JSON.stringify(agent.parameters, null, 2));
+    log(agent.parameters);
     agent.add(`Responding to by country ${agent.parameters.country}`);
   }
-
   const intentMap = new Map();
-  intentMap.set('searchByAge', searchByAge);
   intentMap.set('searchByCountry', searchByCountry);
+  intentMap.set('searchByAge', searchByAge);
   agent.handleRequest(intentMap);
 });
 
@@ -56,7 +49,7 @@ app.get('/api/searchAdd', (request, response) => {
   const searchQuery = request.query.searchQuery;
   search.savedSearch(searchQuery, (error, saveSearchResponse) => {
     if (error) {
-      log(JSON.stringify(error, null, 2));
+      log(error);
     }
     else {
       saveSearchResponse.forEach(result => {
