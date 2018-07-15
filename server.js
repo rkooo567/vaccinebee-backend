@@ -50,6 +50,7 @@ app.get('/api/searchArticlesThroughText', (request, response) => {
   });
 });
 app.get('/api/getTrendingQuestions', (request, response) => {
+  log('Sang');
   firebase.get('questions', (error, questionsResponse) => {
     if (error) {
       log(error);
