@@ -21,6 +21,7 @@ app.get('/api/diseases', (request, response) => {
 
 app.post('/api/dialogflow', (request, response, next) => {
   console.log('/api/dialogflow');
+  console.log(JSON.stringify(request.body, null, 2));
   dialogflow(request.query.query, (error, dialogflowResponse) => {
     response.send(dialogflowResponse);
   });
