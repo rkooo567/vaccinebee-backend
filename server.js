@@ -48,9 +48,15 @@ app.post('/api/dialogflow', (request, response) => {
       agent.add(getResponse);
     });
   }
+
+  const bookAppointment = (agent) => {
+    agent.add(`Cool ! your appointment for #{agent.parameters.disease} is booked for #{agent.parameters.date} `);
+  }
+
   const intentMap = new Map();
   intentMap.set('searchByCountry', searchByCountry);
   intentMap.set('searchByDisease', searchByDisease);
+  intentMap.set('bookAppointment', bookAppointment);
   intentMap.set('searchByAge', searchByAge);
   agent.handleRequest(intentMap);
 });
