@@ -95,6 +95,17 @@ module.exports = {
       else if (parameters.disease) {
         resolve(searchByDisease(parameters.disease));
       }
+      // firebase.read('articles', (error, firebaseResponse) => {
+      //   if (error) {
+      //     reject(error);
+      //   }
+      //   else {
+      //     const summary = Object.keys(firebaseResponse)
+      //       .map(key => firebaseResponse[key])
+      //       .filter(article => article.disease == disease)[0].snippet;
+      //     resolve(`According to CDC, ${summary}`);
+      //   }
+      // });
     });
   },
   queryByText: (query, callback) => {

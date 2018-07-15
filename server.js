@@ -38,7 +38,14 @@ app.post('/api/dialogflow', (request, response) => {
     });
   }
   const bookAppointment = (agent) => {
-    agent.add(`Cool ! your appointment for ${agent.parameters.disease} is booked for ${agent.parameters.date} `);
+    let date = new Date(agent.parameters.date);
+    let options = {
+        weekday: "long", month: "short",
+        day: "numeric", hour: "2-digit", minute: "2-digit"
+    };
+
+    console.log(date.toLocaleTimeString("en-us", options));
+    agent.add(`Cool ! You have your appointment for ${agent.parameters.disease} on ${date.toLocaleTimeString("en-us", options)}`);
   }
   const intentMap = new Map();
   intentMap.set('searchByCountry', search);
@@ -63,10 +70,10 @@ app.get('/api/searchArticlesAndAdd', (request, response) => {
           high: 50,
         };
         result.countries = [
-          
+
         ];
         firebase.push('articles', result, (firebaseResponse) => {
-          
+
         });
       });
     }
