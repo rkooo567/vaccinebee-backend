@@ -19,12 +19,16 @@ app.get('/api/diseases', (request, response) => {
   response.send(`Received ${request.query.name}`);
 });
 
-app.post('/api/dialogflow', (request, response, next) => {
+app.post('/api/dialogflow', (request, response) => {
   console.log('/api/dialogflow');
   console.log(JSON.stringify(request.body, null, 2));
-  dialogflow(request.query.query, (error, dialogflowResponse) => {
-    response.send(dialogflowResponse);
+  response.send({
+    "speech" : "Testing this response",
+    "displayText" : "Testing this response"
   });
+  // dialogflow(request.query.query, (error, dialogflowResponse) => {
+  //   response.send(dialogflowResponse);
+  // });
 });
 
 app.get('/api/searchAdd', (request, response) => {
