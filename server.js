@@ -82,12 +82,19 @@ app.get('/api/search', (request, response) => {
   search.search(request, response, searchQuery);
 });
 
+app.get('/api/upvote', (request, response) => {
+  const articleId = request.query.articleId;
+  set.upvote(articleId, (error, upvoteResponse) => {
+    if (error) {
+      response.send(false);
+    }
+    else {
+      response.send(true);
+    }
+  });
+});
+
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), () => {
   log('Port ' + app.get('port'));
-});
-
-set.upvote('-LHQO8ZxtHp2AT77mS_l', (error, response) => {
-  log(error);
-  log(response);
 });

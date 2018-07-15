@@ -1,4 +1,4 @@
-- Increment upvotes GET
+- DONE Increment upvotes GET
 - Edit snippet POST
 - See trending questions GET
 - Search our database, put into Dialogflow GET with query
