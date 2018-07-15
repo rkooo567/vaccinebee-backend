@@ -6,12 +6,28 @@ const firebase = require('./firebase.js');
 const log = (input) => {
   console.log(JSON.stringify(input, null, 2));
 }
-const arrayStringify = (array) => {
-  if (array.length > 1) {
-    return array.slice(0, array.length - 1).join(', ') + ' and ' + array[array.length -1];
+const stringifyCollection = (array) => {
+  if (typeof array === 'object') {
+    if (!Array.isArray(array)) {
+      array = Object.keys(array);
+    }
+    if (array.length > 1) {
+      return array.slice(0, array.length - 1).join(', ') + ' and ' + array[array.length -1];
+    }
+    else {
+      return array[0];
+    }
+  }
+}
+const pluralize = (array, singular, plural) => {
+  if (typeof array === 'object') {
+    if (!Array.isArray(array)) {
+      array = Object.keys(array);
+    }
+    return array.length === 1 ? singular : plural;
   }
   else {
-    return array[0];
+    console.log(`${array} is not a collection`);
   }
 }
 
@@ -23,10 +39,7 @@ const searchByDisease = (disease) => {
         reject(error);
       }
       else {
-        const summary = Object.keys(firebaseResponse)
-          .map(key => firebaseResponse[key])
-          .filter(article => article.disease == disease)[0].snippet;
-        resolve(`Here is a summart ${summary}`);
+        resolve(firebaseResponse);
       }
     });
   });
@@ -38,20 +51,11 @@ const searchByCountry = (country, callback) => {
         reject(error);
       }
       else {
-        const diseases = {};
-        Object.keys(firebaseResponse)
-          .map(key => firebaseResponse[key])
-          .filter(article => article.countries.includes(country.toLocaleLowerCase()))
-          .map(article => article.disease)
-          .forEach(disease => {
-            if (diseases.hasOwnProperty(disease)) {
-              diseases[disease] += 1;
-            }
-            else {
-              diseases[disease] = 0;
-            }
-          });
-        resolve(`For a trip to ${country} you should probably look at ${arrayStringify(Object.keys(diseases))}.`);
+        resolve(
+          Object.keys(firebaseResponse)
+            .map(key => firebaseResponse[key])
+            .filter(article => article.countries.includes(country.toLocaleLowerCase()))
+        );
       }
     });
   });
@@ -63,20 +67,11 @@ const searchByAge = (age) => {
         reject(error);
       }
       else {
-        const diseases = {};
-        Object.keys(articles)
-          .map(key => articles[key])
-          .filter(article => article.age.low <= age && age <= article.age.high)
-          .map(article => article.disease)
-          .forEach(disease => {
-            if (diseases.hasOwnProperty(disease)) {
-              diseases[disease] += 1;
-            }
-            else {
-              diseases[disease] = 0;
-            }
-          });
-        resolve(`The most common disease${Object.keys(diseases).length === 1 ? '' : 's'} for a ${age} year old ${Object.keys(diseases).length === 1 ? 'is' : 'are'} ${arrayStringify(Object.keys(diseases))}.`);
+        resolve(
+          Object.keys(articles)
+            .map(key => articles[key])
+            .filter(article => article.age.low <= age && age <= article.age.high)
+        );
       }
     });
   });
@@ -87,13 +82,44 @@ module.exports = {
   queryByVoice: (parameters, callback) => {
     return new Promise((resolve, reject) => {
       if (parameters.age) {
-        resolve(searchByAge(parameters.age.amount));
+        searchByAge(parameters.age.amount).then(searchResponse => {
+          const diseases = {};
+          searchResponse
+            .map(article => article.disease)
+            .forEach(disease => {
+              if (diseases.hasOwnProperty(disease)) {
+                diseases[disease] += 1;
+              }
+              else {
+                diseases[disease] = 0;
+              }
+            });
+          resolve(`The most common disease${pluralize(diseases, '', 's')} for a ${parameters.age.amount} year old ${pluralize(diseases, 'is', 'are')} ${stringifyCollection(diseases)}.`);
+        });
       }
       else if (parameters.country) {
-        resolve(searchByCountry(parameters.country));
+        const diseases = {};
+        searchByCountry(parameters.country).then(searchResponse => {
+          searchResponse
+            .map(article => article.disease)
+            .forEach(disease => {
+              if (diseases.hasOwnProperty(disease)) {
+                diseases[disease] += 1;
+              }
+              else {
+                diseases[disease] = 0;
+              }
+            });
+          resolve(`For a trip to ${parameters.country} you should probably look at ${stringifyCollection(diseases)}.`);
+        });
       }
       else if (parameters.disease) {
-        resolve(searchByDisease(parameters.disease));
+        searchByDisease(parameters.disease).then(searchResponse => {
+          const summary = Object.keys(searchResponse)
+            .map(key => searchResponse[key])
+            .filter(article => article.disease == disease)[0].snippet;
+          resolve(`Here is a summary ${summary}`);
+        });
       }
       // firebase.read('articles', (error, firebaseResponse) => {
       //   if (error) {
@@ -109,26 +135,27 @@ module.exports = {
     });
   },
   queryByText: (query, callback) => {
-    dialogflow(query, (error, response) => {
-      if (error) {
-        callback(error, null);
-      }
-      else {
-        if (typeof response === 'string') {
-          response = JSON.parse(response);
+    return new Promise((resolve, reject) => {
+      dialogflow(query, (error, response) => {
+        if (error) {
+          callback(error, null);
         }
-        const parameters = response.result.parameters;
-        if (parameters.age) {
-          
+        else {
+          if (typeof response === 'string') {
+            response = JSON.parse(response);
+          }
+          const parameters = response.result.parameters;
+          if (parameters.age) {
+            resolve(searchByAge(parameters.age.amount));
+          }
+          else if (parameters.country) {
+            resolve(searchByCountry(parameters.country));
+          }
+          else if (parameters.disease) {
+            resolve(searchByDisease(parameters.disease));
+          }
         }
-        else if (parameters.country) {
-          
-        }
-        else if (parameters.disease) {
-          
-        }
-        log(parameters);
-      }
+      });
     });
   }
 };

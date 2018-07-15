@@ -114,6 +114,6 @@ app.listen(app.get('port'), () => {
 });
 
 // Test
-get.queryByText('I am going to Brazil this weekend. Which vaccines should I get?', (error, questionsResponse) => {
-  let dummy;
+get.queryByText('I am going to Brazil this weekend. Which vaccines should I get?').then(questionsResponse => {
+  log(questionsResponse);
 });
