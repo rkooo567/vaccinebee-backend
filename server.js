@@ -4,7 +4,7 @@ const dialogflow = require('./server/dialogflow.js');
 const firebase = require('./server/firebase.js');
 const app = express();
 const search = require('./controller/customSearch');
-const dialogFlowApp = require('actions-on-google').DialogflowApp
+const dialogFlowApp = require('actions-on-google').dialogflow;
 
 app.use('/public', express.static(process.cwd() + '/public'));
 app.set('view engine', 'ejs');
