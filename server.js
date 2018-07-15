@@ -46,11 +46,11 @@ app.get('/api/searchArticlesUsingGoogle', (request, response) => {
 });
 app.get('/api/searchArticlesThroughText', (request, response) => {
   get.searchArticlesThroughText(request.query.query).then(articles => {
+    response.set('Access-Control-Allow-Origin', 'https://oshaw-vacspider-backend.herokuapp.com/');
     response.send(articles);
   });
 });
 app.get('/api/getTrendingQuestions', (request, response) => {
-  log('Sang');
   firebase.get('questions', (error, questionsResponse) => {
     if (error) {
       log(error);
@@ -59,6 +59,7 @@ app.get('/api/getTrendingQuestions', (request, response) => {
     else {
       const questions = Object.keys(questionsResponse).map(id => questionsResponse[id])
       _.sortBy(questions, [(question) => { return question.timesAsked; }]);
+      response.set('Access-Control-Allow-Origin', 'https://oshaw-vacspider-backend.herokuapp.com/');
       response.send(questions.slice(0, 10)); // Send top 5 most asked questions
     }
   });
@@ -67,6 +68,7 @@ app.post('/api/getArticlesAnsweringQuestion', (request, response) => {
   get.searchArticlesAnsweringQuestion(request.body.parameters).then(articlesResponse => {
     const articles = Object.keys(articlesResponse).map(id => articlesResponse[id]);
     _.sortBy(articles, [(article) => { return article.upvotes; }]);
+    response.set('Access-Control-Allow-Origin', 'https://oshaw-vacspider-backend.herokuapp.com/');
     response.send(articles.slice(0, 10));
   });
 });
@@ -100,6 +102,7 @@ app.post('/api/upvote', (request, response) => {
       response.send(false);
     }
     else {
+      response.set('Access-Control-Allow-Origin', 'https://oshaw-vacspider-backend.herokuapp.com/');
       response.send(true);
     }
   });
