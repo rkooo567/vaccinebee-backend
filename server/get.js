@@ -54,7 +54,7 @@ const searchArticlesByCountry = (country) => {
         resolve(
           Object.keys(firebaseResponse)
             .map(key => firebaseResponse[key])
-            .filter(article => article.countries.includes(country.toLocaleLowerCase()))
+            .filter(article => article.countries.map(coun => count.toLocaleLowerCase())includes(country.toLocaleLowerCase()))
         );
       }
     });
@@ -145,20 +145,9 @@ module.exports = {
           const summary = Object.keys(searchResponse)
             .map(key => searchResponse[key])
             .filter(article => article.disease == disease)[0].snippet;
-          resolve(`Here is a summary ${summary}`);
+          resolve(`According to CDC, ${summary}`);
         });
       }
-      // firebase.get('articles', (error, firebaseResponse) => {
-      //   if (error) {
-      //     reject(error);
-      //   }
-      //   else {
-      //     const summary = Object.keys(firebaseResponse)
-      //       .map(key => firebaseResponse[key])
-      //       .filter(article => article.disease == disease)[0].snippet;
-      //     resolve(`According to CDC, ${summary}`);
-      //   }
-      // });
     });
   },
   searchArticlesThroughText: (query, callback) => {
