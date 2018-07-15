@@ -106,6 +106,7 @@ const saveQuestion = (agent) => {
 module.exports = {
   searchArticlesThroughVoice: (agent, callback) => {
     const parameters = agent.parameters;
+    log('------- ' + JSON.stringify(parameters, null, 2) + '-------');
     saveQuestion(agent);
     return new Promise((resolve, reject) => {
       if (parameters.age) {
