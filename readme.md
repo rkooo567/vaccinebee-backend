@@ -1,7 +1,7 @@
 # VaccineBee Backend
 
 <p align="center">
-  <img src="http://res.cloudinary.com/ideation/image/upload/w_1920,c_fit/dt944g5kupifktmssawc.png" />
+  <img src="https://i.imgur.com/3Srga1S.png" />
   <b>
     <a href=https://platform-gskimmunohack.bemyapp.com/#/projects/5b4a7d728c9a14000367f2d1>Project</a>
     <br />
