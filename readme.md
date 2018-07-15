@@ -1,4 +1,4 @@
-# VaccineBee
+# VaccineBee Backend
 
 <p align="center">
   <img src="http://res.cloudinary.com/ideation/image/upload/w_1920,c_fit/dt944g5kupifktmssawc.png" />
