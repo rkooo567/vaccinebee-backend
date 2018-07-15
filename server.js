@@ -50,7 +50,9 @@ app.post('/api/dialogflow', (request, response) => {
   }
 
   const bookAppointment = (agent) => {
-    agent.add(`Cool ! your appointment for ${agent.parameters.disease} is booked for ${agent.parameters.date} `);
+    const date = new Date(agent.parameters.date);
+    const date_string = `${date.toDateString()} ${date.toLocaleTimeString()}`
+    agent.add(`Cool ! You have your appointment for ${agent.parameters.disease} at ${date_string} `);
   }
 
   const intentMap = new Map();
