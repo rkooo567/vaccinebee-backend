@@ -32,26 +32,15 @@ app.get('/api/diseases', (request, response) => {
 });
 app.post('/api/dialogflow', (request, response) => {
   const agent = new WebhookClient({ request, response });
-   const searchByAge = (agent) => {
-    return get.searchByAge(agent.parameters.age.amount).then((getResponse) => {
-      agent.add(getResponse);
-    });
-  }
-  const searchByCountry = (agent) => {
-    return get.searchByCountry(agent.parameters.country).then((getResponse) => {
-      agent.add(getResponse);
-    });
-  }
-
-  const searchByDisease = (agent) => {
-    return get.searchByCountry(agent.parameters.disease).then((getResponse) => {
+  const search = (agent) => {
+    return get.queryByVoice(agent.parameters).then((getResponse) => {
       agent.add(getResponse);
     });
   }
   const intentMap = new Map();
-  intentMap.set('searchByCountry', searchByCountry);
-  intentMap.set('searchByDisease', searchByDisease);
-  intentMap.set('searchByAge', searchByAge);
+  intentMap.set('searchByCountry', search);
+  intentMap.set('searchByDisease', search);
+  intentMap.set('searchByAge', search);
   agent.handleRequest(intentMap);
 });
 app.get('/api/searchAdd', (request, response) => {
@@ -114,6 +103,6 @@ app.listen(app.get('port'), () => {
 });
 
 // Test
-get.questions('I am 20 years old', (error, questionsResponse) => {
+get.queryByText('I am going to Brazil this weekend. Which vaccines should I get?', (error, questionsResponse) => {
   let dummy;
 });
