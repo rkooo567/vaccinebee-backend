@@ -1,16 +1,20 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-// const dialogflow = require('./server/dialogflow.js');
-const firebase = require('./server/firebase.js');
-const app = express();
 const search = require('./controller/customSearch');
+const get = require('./server/get.js');
+const firebase = require('./server/firebase.js');
 const {WebhookClient, Card, Suggestion} = require('dialogflow-fulfillment');
-const {dialogflow, Image} = require('actions-on-google')
- 
+const {dialogflow, Image} = require('actions-on-google');
+
+const app = express();
 app.use('/public', express.static(process.cwd() + '/public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+const log = (input) => {
+  console.log(JSON.stringify(input, null, 2));
+}
 
 app.get('/', (request, response) => {
   response.render('doctor-dashboard');
@@ -23,12 +27,17 @@ app.get('/api/diseases', (request, response) => {
 
 app.post('/api/dialogflow', (request, response) => {
   const agent = new WebhookClient({ request, response });
-  console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
-  console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
-const searchByAge = (agent) => {
-
-    console.log(JSON.stringify(request.body, null, 2));
-    agent.add(`i am an idiot who is ${request.body.queryResult.parameters.age}`);
+  log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
+  log('Dialogflow Request body: ' + JSON.stringify(request.body));
+  const searchByAge = (agent) => {
+    get.searchByAge(request.body.queryResult.parameters.age.amount, (error, response) => {
+      if (error) {
+        agent.add('Sorry, something went wrong on my end!');
+      }
+      else {
+        agent.add(response);
+      }
+    });
   }
   const intentMap = new Map();
   intentMap.set('searchByAge', searchByAge);
@@ -36,18 +45,25 @@ const searchByAge = (agent) => {
 });
 
 app.get('/api/searchAdd', (request, response) => {
-  console.log('/api/searchAdd');
+  log('/api/searchAdd');
   const searchQuery = request.query.searchQuery;
   search.savedSearch(searchQuery, (error, saveSearchResponse) => {
     if (error) {
-      console.log(JSON.stringify(error, null, 2));
+      log(JSON.stringify(error, null, 2));
     }
     else {
       saveSearchResponse.forEach(result => {
         result.disease = 'varicella';
         result.query = 'definition';
-        firebase.push('intents', result, (firebaseResponse) => {
-          console.log(firebaseResponse);
+        result.age = {
+          low: 20,
+          high: 50,
+        };
+        result.countries = [
+          
+        ];
+        firebase.push('articles', result, (firebaseResponse) => {
+          
         });
       });
     }
@@ -55,13 +71,12 @@ app.get('/api/searchAdd', (request, response) => {
 });
 
 app.get('/api/search', (request, response) => {
-  console.log('/api/search');
+  log('/api/search');
   const searchQuery = request.query.searchQuery;
   search.search(request, response, searchQuery);
 });
 
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), () => {
-  console.log('Port ' + app.get('port'));
+  log('Port ' + app.get('port'));
 });
-
