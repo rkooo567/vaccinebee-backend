@@ -22,10 +22,15 @@ app.get('/api/diseases', (request, response) => {
 app.post('/api/dialogflow', (request, response) => {
   console.log('/api/dialogflow');
   console.log(JSON.stringify(request.body, null, 2));
-  response.send({
-    "speech" : "Testing this response",
-    "displayText" : "Testing this response"
-  });
+  // response.send({
+  //   "speech" : "Testing this response",
+  //   "displayText" : "Testing this response"
+  // });
+  response.setHeader('Content-Type', 'application/json');
+  response.send(JSON.stringify({
+    "speech" : "Error. Can you try it again ? ",
+    "displayText" : "Error. Can you try it again ? "
+  }));
   // dialogflow(request.query.query, (error, dialogflowResponse) => {
   //   response.send(dialogflowResponse);
   // });
