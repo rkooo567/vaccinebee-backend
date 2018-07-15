@@ -54,7 +54,7 @@ const searchArticlesByCountry = (country) => {
         resolve(
           Object.keys(firebaseResponse)
             .map(key => firebaseResponse[key])
-            .filter(article => article.countries.map(coun => count.toLocaleLowerCase())includes(country.toLocaleLowerCase()))
+            .filter(article => article.countries.map(coun => count.toLocaleLowerCase()).includes(country.toLocaleLowerCase()))
         );
       }
     });
