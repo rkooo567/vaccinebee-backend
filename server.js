@@ -41,8 +41,9 @@ app.post('/api/dialogflow', (request, response) => {
     });
   }
   const searchByCountry = (agent) => {
-    log(agent.parameters);
-    agent.add(`Responding to by country ${agent.parameters.country}`);
+    return get.searchByCountry(agent.parameters.country).then((getResponse) => {
+      agent.add(getResponse);
+    });
   }
   const intentMap = new Map();
   intentMap.set('searchByCountry', searchByCountry);

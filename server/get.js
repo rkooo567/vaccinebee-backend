@@ -11,7 +11,32 @@ const arrayStringify = (array) => {
 }
 
 module.exports = {
-  searchByAge: (age, callback) => {
+  searchByCountry: (country, callback) => {
+    return new Promise((resolve, reject) => {
+      firebase.read('articles', (error, firebaseResponse) => {
+        if (error) {
+          reject(error);
+        }
+        else {
+          const diseases = {};
+          Object.keys(firebaseResponse)
+            .map(key => firebaseResponse[key])
+            .filter(article => article.countries.includes(country.toLocaleLowerCase()))
+            .map(article => article.disease)
+            .forEach(disease => {
+              if (diseases.hasOwnProperty(disease)) {
+                diseases[disease] += 1;
+              }
+              else {
+                diseases[disease] = 0;
+              }
+            });
+          resolve(`For a trip to ${country} you should probably look at ${arrayStringify(Object.keys(diseases))}.`);
+        }
+      });
+    });
+  },
+    searchByAge: (age) => {
     return new Promise((resolve, reject) => {
       firebase.read('articles', (error, articles) => {
         if (error) {
