@@ -5,10 +5,10 @@ const firebase = require('./server/firebase.js');
 const app = express();
 const search = require('./controller/customSearch').search;
 
-app.use('/public', express.static(process.cwd() + '/public'));
-app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use('/public', express.static(process.cwd() + '/public'));
+app.set('view engine', 'ejs');
 
 app.get('/', (request, response) => {
   response.render('doctor-dashboard');

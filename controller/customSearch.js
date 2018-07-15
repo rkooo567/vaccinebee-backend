@@ -64,8 +64,6 @@ const parseOnlyRequiredFieldInItem = (item) => {
     return parsedResult;
 }
 
-search('vaccines');
-
 module.exports = {
     search
 }
