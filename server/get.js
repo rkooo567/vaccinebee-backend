@@ -46,7 +46,7 @@ const searchArticlesByDisease = (disease) => {
   });
 };
 const searchArticlesByCountry = (country) => {
-  country = 'India';
+  // country = 'India';
   return new Promise((resolve, reject) => {
     firebase.get('articles', (error, firebaseResponse) => {
       if (error) {
@@ -63,7 +63,7 @@ const searchArticlesByCountry = (country) => {
   });
 };
 const searchArticlesByAge = (age) => {
-  age.amount = 20;
+  // age.amount = 20;
   return new Promise((resolve, reject) => {
     firebase.get('articles', (error, articles) => {
       if (error) {
