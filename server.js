@@ -4,6 +4,7 @@ const dialogflow = require('./server/dialogflow.js');
 const firebase = require('./server/firebase.js');
 const app = express();
 const search = require('./controller/customSearch');
+const dialogFlowApp = require('actions-on-google').DialogflowApp
 
 app.use('/public', express.static(process.cwd() + '/public'));
 app.set('view engine', 'ejs');
@@ -20,25 +21,13 @@ app.get('/api/diseases', (request, response) => {
 });
 
 app.post('/api/dialogflow', (request, response) => {
-  console.log('/api/dialogflow');
-  console.log(JSON.stringify(request.body, null, 2));
-  // response.send({
-  //   "speech" : "Testing this response",
-  //   "displayText" : "Testing this response"
-  // });
-  // response.setHeader('Content-Type', 'application/json');
-  // response.send(JSON.stringify({
-  //   "speech" : "Error. Can you try it again ? ",
-  //   "displayText" : "Error. Can you try it again ? "
-  // }));
-  dialogflow(request.query.query, (error, dialogflowResponse) => {
-    response.setHeader('Content-Type', 'application/json');
-    response.send(dialogflowResponse);
-    // response.send(JSON.stringify({
-    //   "speech" : "Error. Can you try it again ? ",
-    //   "displayText" : "Error. Can you try it again ? "
-    // }));
-  });
+  const api_app = new dialogFlowApp({request, response});
+  console.log('Request headers: ' + JSON.stringify(request.headers));
+  console.log('Request body: ' + JSON.stringify(request.body));
+  // Fulfill action business logic
+  function responseHandler (api_app) {
+    api_app.ask("what more do you want from me!");
+  };
 });
 
 app.get('/api/searchAdd', (request, response) => {
