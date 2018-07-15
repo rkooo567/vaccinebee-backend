@@ -150,7 +150,7 @@ module.exports = {
       }
     });
   },
-  searchArticlesThroughText: (query, callback) => {
+  searchArticlesThroughText: (query) => {
     return new Promise((resolve, reject) => {
       dialogflow(query, (error, response) => {
         if (error) {

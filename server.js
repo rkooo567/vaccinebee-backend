@@ -45,13 +45,8 @@ app.get('/api/searchArticlesUsingGoogle', (request, response) => {
   search.search(request, response, searchQuery);
 });
 app.get('/api/searchArticlesThroughText', (request, response) => {
-  get.searchArticlesThroughText(request.query.query, (error, questionsResponse) => {
-    if (error) {
-      response.send(false);
-    }
-    else {
-      response.send(questionsResponse);
-    }
+  get.searchArticlesThroughText(request.query.query).then(articles => {
+    response.send(articles);
   });
 });
 app.get('/api/getTrendingQuestions', (request, response) => {
