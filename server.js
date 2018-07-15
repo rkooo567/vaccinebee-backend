@@ -27,28 +27,15 @@ const log = (input) => {
 app.get('/', (request, response) => {
   response.render('doctor-dashboard');
 });
-app.get('/api/searchArticlesUsingGoogleAndAdd', (request, response) => {
-  log('/api/searchArticlesUsingGoogleAndAdd');
-  const searchQuery = request.query.searchQuery;
-  search.savedSearch(searchQuery, (error, saveSearchResponse) => {
+app.get('/api/searchArticlesUsingGoogleAndSave', (request, response) => {
+  log('/api/searchArticlesUsingGoogleAndSave');
+  const query = request.query.query;
+  search.savedSearch(query, (error, saveSearchResponse) => {
     if (error) {
       log(error);
     }
     else {
-      saveSearchResponse.forEach(result => {
-        result.disease = 'varicella';
-        result.query = 'definition';
-        result.age = {
-          low: 20,
-          high: 50,
-        };
-        result.countries = [
-
-        ];
-        firebase.create('articles', result, (firebaseResponse) => {
-
-        });
-      });
+      set.saveArticles(saveSearchResponse);
     }
   });
 });

@@ -5,6 +5,24 @@ const log = (input) => {
 }
 
 module.exports = {
+  saveArticles: (articles) => {
+    return new Promise((resolve, reject) => {
+      articles.forEach(article => {
+        article.disease = 'varicella';
+        article.query = 'definition';
+        article.age = {
+          low: 20,
+          high: 50,
+        };
+        article.countries = [
+          
+        ];
+        firebase.create('articles', article, (firebaseResponse) => {
+    
+        });
+      });
+    });
+  },
   upvote: (articleId, callback) => {
     firebase.get('articles', (error, articles) => {
       const article = articles[articleId];
