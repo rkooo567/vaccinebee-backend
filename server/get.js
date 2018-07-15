@@ -33,6 +33,7 @@ const pluralize = (array, singular, plural) => {
 
 // Private
 const searchArticlesByDisease = (disease) => {
+  disease = 'measles';
   return new Promise((resolve, reject) => {
     firebase.get('articles', (error, firebaseResponse) => {
       if (error) {
@@ -45,6 +46,7 @@ const searchArticlesByDisease = (disease) => {
   });
 };
 const searchArticlesByCountry = (country) => {
+  country = 'India';
   return new Promise((resolve, reject) => {
     firebase.get('articles', (error, firebaseResponse) => {
       if (error) {
@@ -61,6 +63,7 @@ const searchArticlesByCountry = (country) => {
   });
 };
 const searchArticlesByAge = (age) => {
+  age.amount = 20;
   return new Promise((resolve, reject) => {
     firebase.get('articles', (error, articles) => {
       if (error) {
@@ -150,7 +153,7 @@ module.exports = {
             resolve(`According to CDC, ${summary.snippet}`);
           }
           else {
-            reject('No summary');
+            resolve('No summary');
           }
         });
       }
