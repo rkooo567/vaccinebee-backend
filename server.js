@@ -34,7 +34,7 @@ app.post('/api/dialogflow', (request, response) => {
       }
       else {
         log('Dialogflow Request body: ' + response);
-        agent.add(response);
+        agent.add(`Testing with ${response}`);
       }
     });
   }
