@@ -1,6 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-const dialogflow = require('./server/dialogflow.js');
+// const dialogflow = require('./server/dialogflow.js');
 const firebase = require('./server/firebase.js');
 const app = express();
 const search = require('./controller/customSearch');
