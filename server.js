@@ -1,22 +1,28 @@
-// const async = require('asyncawait/async');
-// const await = require('asyncawait/await');
+// Modules
 const bodyParser = require('body-parser');
 const express = require('express');
-const search = require('./controller/customSearch');
-const get = require('./server/get.js');
-const firebase = require('./server/firebase.js');
 const {WebhookClient, Card, Suggestion} = require('dialogflow-fulfillment');
 const {dialogflow, Image} = require('actions-on-google');
 
+// Files
+const firebase = require('./server/firebase.js');
+const get = require('./server/get.js');
+const set = require('./server/set.js');
+const search = require('./controller/customSearch');
+
+// Setup
 const app = express();
 app.use('/public', express.static(process.cwd() + '/public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+// Helpers
 const log = (input) => {
   console.log(JSON.stringify(input, null, 2));
 }
+
+// Routes
 
 app.get('/', (request, response) => {
   response.render('doctor-dashboard');
@@ -79,4 +85,9 @@ app.get('/api/search', (request, response) => {
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), () => {
   log('Port ' + app.get('port'));
+});
+
+set.upvote('-LHQO8ZxtHp2AT77mS_l', (error, response) => {
+  log(error);
+  log(response);
 });
