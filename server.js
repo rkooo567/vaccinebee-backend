@@ -26,8 +26,9 @@ app.post('/api/dialogflow', (request, response) => {
   console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
   console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 const searchByAge = (agent) => {
+
     console.log(JSON.stringify(request.body, null, 2));
-    agent.add(`i am an idiot.`);
+    agent.add(`i am an idiot who is ${request.queryResult.parameters.age}`);
   }
   const intentMap = new Map();
   intentMap.set('searchByAge', searchByAge);
