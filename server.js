@@ -1,22 +1,28 @@
-// const async = require('asyncawait/async');
-// const await = require('asyncawait/await');
+// Modules
 const bodyParser = require('body-parser');
 const express = require('express');
-const search = require('./controller/customSearch');
-const get = require('./server/get.js');
-const firebase = require('./server/firebase.js');
 const {WebhookClient, Card, Suggestion} = require('dialogflow-fulfillment');
 const {dialogflow, Image} = require('actions-on-google');
 
+// Files
+const firebase = require('./server/firebase.js');
+const get = require('./server/get.js');
+const set = require('./server/set.js');
+const search = require('./controller/customSearch');
+
+// Setup
 const app = express();
 app.use('/public', express.static(process.cwd() + '/public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+// Helpers
 const log = (input) => {
   console.log(JSON.stringify(input, null, 2));
 }
+
+// Routes
 
 app.get('/', (request, response) => {
   response.render('doctor-dashboard');
@@ -82,6 +88,18 @@ app.get('/api/search', (request, response) => {
   log('/api/search');
   const searchQuery = request.query.searchQuery;
   search.search(request, response, searchQuery);
+});
+
+app.get('/api/upvote', (request, response) => {
+  const articleId = request.query.articleId;
+  set.upvote(articleId, (error, upvoteResponse) => {
+    if (error) {
+      response.send(false);
+    }
+    else {
+      response.send(true);
+    }
+  });
 });
 
 app.set('port', (process.env.PORT || 5000));

@@ -53,14 +53,14 @@ module.exports = {
   },
     searchByAge: (age) => {
     return new Promise((resolve, reject) => {
-      firebase.read('articles', (error, firebaseResponse) => {
+      firebase.read('articles', (error, articles) => {
         if (error) {
           reject(error);
         }
         else {
           const diseases = {};
-          Object.keys(firebaseResponse)
-            .map(key => firebaseResponse[key])
+          Object.keys(articles)
+            .map(key => articles[key])
             .filter(article => article.age.low <= age && age <= article.age.high)
             .map(article => article.disease)
             .forEach(disease => {
