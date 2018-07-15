@@ -7,7 +7,7 @@
     <br />
     <a href=https://oshaw-vacspider-backend.herokuapp.com>Heroku</a>
     <br />
-    <a href=https://github.com/rkooo567/VaccineBeeFrontend>Bacend Repository</a>
+    <a href=https://github.com/rkooo567/VaccineBeeFrontend>Frontend Repository</a>
   </b>
 </p>
 
