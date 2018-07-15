@@ -22,7 +22,7 @@ module.exports = {
       }
     });
   },
-  searchBydisease: (disease) => {
+  searchByDisease: (disease) => {
     return new Promise((resolve, reject) => {
       firebase.read('articles', (error, firebaseResponse) => {
         if (error) {
@@ -32,7 +32,7 @@ module.exports = {
           const summary = Object.keys(firebaseResponse)
             .map(key => firebaseResponse[key])
             .filter(article => article.disease == disease)[0].snippet;
-          resolve(`Here is a summart ${summary}`);
+          resolve(`Here is a summary ${summary}`);
         }
       });
     });

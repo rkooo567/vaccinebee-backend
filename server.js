@@ -44,7 +44,7 @@ app.post('/api/dialogflow', (request, response) => {
   }
 
   const searchByDisease = (agent) => {
-    return get.searchByCountry(agent.parameters.disease).then((getResponse) => {
+    return get.searchByDisease(agent.parameters.disease).then((getResponse) => {
       agent.add(getResponse);
     });
   }
