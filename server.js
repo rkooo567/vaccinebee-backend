@@ -30,7 +30,7 @@ app.post('/api/dialogflow', (request, response) => {
   log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
   log('Dialogflow Request body: ' + JSON.stringify(request.body));
   const searchByAge = (agent) => {
-    get.searchByAge(request.body.queryResult.parameters.age.amount, (error, response) => {
+    get.searchByAge(agent.parameters.age.amount, (error, response) => {
       if (error) {
         agent.add('Sorry, something went wrong on my end!');
       }
@@ -39,8 +39,15 @@ app.post('/api/dialogflow', (request, response) => {
       }
     });
   }
+
+  const searchByCountry = (agent) => {
+    console.log(JSON.stringify(agent.parameters, null, 2));
+    agent.add(`Responding to by country ${agent.parameters.country}`);
+  }
+
   const intentMap = new Map();
   intentMap.set('searchByAge', searchByAge);
+  intentMap.set('searchByCountry', searchByCountry);
   agent.handleRequest(intentMap);
 });
 
