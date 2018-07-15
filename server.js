@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.get('/', (request, response) => {
-  response.render('search.ejs');
+  response.render('doctor-dashboard');
 });
 
 app.get('/api/diseases', (request, response) => {
